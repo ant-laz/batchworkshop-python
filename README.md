@@ -102,32 +102,32 @@ python -m unittest test.test_pipeline.TestExtractSpeech.test_task_1_extract_spee
 
 For task 2
 ```sh
-TODO
+python -m unittest test.test_pipeline.TestSpeechToWords.test_task_2_speech_to_words
 ```
 
 For task 3
 ```sh
-TODO
+python -m unittest test.test_pipeline.TestSanitizeWords.test_task_3_sanitize_words
 ```
 
 For task 4
 ```sh
-TODO
+python -m unittest test.test_pipeline.TestCountWordFrequency.test_task_4_count_word_frequency
 ```
 
 For task 5
 ```sh
-TODO
+python -m unittest test.test_pipeline.TopWords.test_task_5_top_words
 ```
 
 For task 6
 ```sh
-TODO
+python -m unittest test.test_pipeline.Prettify.test_task_6_prettify
 ```
 
 For task 7
 ```sh
-TODO
+python -m unittest test.test_pipeline.FrequentWords.test_task_7_frequent_words
 ```
 
 
