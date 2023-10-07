@@ -71,6 +71,20 @@ This is a hands on workshop, please come ready with Python 3.10 installed:
   pip install -e .
   ```
 
+  ## checking everything is setup correctly 
+
+  run this python one-liner to check that you python + apache beam installed
+
+  ```sh
+  python -c "import apache_beam as beam; import sys; print(f'beam version is = {beam.__version__}'); print(f'python version is = {sys.version}')"
+  ```
+
+  Output shold be similar to
+  ```sh
+beam version is = 2.50.0
+python version is = 3.10.0 (default, Apr 28 2023, 17:16:10) [Clang 14.0.3 (clang-1403.0.22.14.1)]
+  ```
+
 # 2. Developing the pipeline by making the test suite pass
 
 To run all the tests
@@ -80,9 +94,42 @@ python -m unittest -v
 ```
 
 To run just a single test, choose from the below.
+
+For task 1
 ```sh
-python -m unittest test.test_pipeline.TestTaxiPointCreation.test_task_1_taxi_point_creation
+python -m unittest test.test_pipeline.TestExtractSpeech.test_task_1_extract_speech
 ```
+
+For task 2
+```sh
+TODO
+```
+
+For task 3
+```sh
+TODO
+```
+
+For task 4
+```sh
+TODO
+```
+
+For task 5
+```sh
+TODO
+```
+
+For task 6
+```sh
+TODO
+```
+
+For task 7
+```sh
+TODO
+```
+
 
 # 3. Executing the pipline using the DirectRunner
 
