@@ -28,9 +28,6 @@ class MyOptions(PipelineOptions):
     parser.add_argument(
         '--output_filename', 
         help='In data/output folder, the file to write results to.')
-    parser.add_argument(
-        '--number_of_top_words_to_report_on', 
-        help='The number of top words to report on in terms of occurence')    
 
 if __name__ == "__main__":
 

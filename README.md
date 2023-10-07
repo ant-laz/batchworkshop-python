@@ -96,8 +96,7 @@ python main.py  \
   --save_main_session \
   --setup_file ./setup.py \
   --input_filename=data/input/harry_potter_philosopher_stone_script_sample.csv \
-  --output_filename=data/output/harry_potter_philosopher_stone_script_sample_results.txt \
-  --number_of_top_words_to_report_on=100
+  --output_filename=data/output/harry_potter_philosopher_stone_script_sample_results.txt
 ```
 
 Run it for the entire script of Harry Potter & the Philosopher's stone.
@@ -108,8 +107,7 @@ python main.py  \
   --save_main_session \
   --setup_file ./setup.py \
   --input_filename=data/input/harry_potter_philosopher_stone_script.csv \
-  --output_filename=data/output/harry_potter_philosopher_stone_script_results.txt \
-  --number_of_top_words_to_report_on=100
+  --output_filename=data/output/harry_potter_philosopher_stone_script_results.txt
 ```
 
 
@@ -118,7 +116,7 @@ Here is a description of what each of these flags mean
 | Flag | Description |
 | --- | --- |
 | runner | Apache Beam execution engine or "runner", e.g. DirectRunner or DataflowRunner |
-| streaming | If present, pipeline executes in streaming mode otherwise in batch mode |
+| streaming | By omitting this the pipeline does not execute in streaming mode but in batch mode |
 | save_main_session | Make global imports availabe to all dataflow workers [details](https://cloud.google.com/dataflow/docs/guides/common-errors#name-error) |
 | setup_file | To hanle Multiple File Dependencies [details](https://beam.apache.org/documentation/sdks/python-pipeline-dependencies/) |
 | input-filename | Custom. The input file to the pipeline. |
@@ -127,3 +125,9 @@ Here is a description of what each of these flags mean
 # 4. Executing the pipeline using the DataflowRunner
 
 TODO
+
+# 5. Credits
+
+This is based on a workshop created by Israel Herraiz which can be found [here](https://youtu.be/ljoba-i6ZPk)
+
+This uses a dataset from Kaggle which can be found [here](https://www.kaggle.com/datasets/eward96/harry-potter-and-the-philosophers-stone-script)

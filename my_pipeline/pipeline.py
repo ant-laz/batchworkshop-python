@@ -22,7 +22,7 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam import PCollection
 
 ########################################################################################
-# TASK 1 : Extract speech field from CSV
+# TASK 1 : Write a DoFn to Extract speech field from CSV
 ########################################################################################
 
 class ExtractSpeech(beam.DoFn):
@@ -42,7 +42,7 @@ class ExtractSpeech(beam.DoFn):
     return [speech_field]
 
 ########################################################################################
-# TASK 2 : Split a line of speech into words
+# TASK 2 : Write a DoFn to Split a line of speech into words
 ########################################################################################
 
 class SpeechToWords(beam.DoFn):
@@ -51,7 +51,7 @@ class SpeechToWords(beam.DoFn):
         return element.split()
 
 ########################################################################################
-# TASK 3 : remove special characters from words
+# TASK 3 : Write a DoFn to remove special characters from words
 ########################################################################################
 
 class SanitizeWords(beam.DoFn):
@@ -60,26 +60,41 @@ class SanitizeWords(beam.DoFn):
         word = element
         word = word.lower()
         word = word.replace(",", "").replace(".", "")
-        return[word]
+        return [word]
 
 
 ########################################################################################
-# TASK 4 : counting occurence of words
+# TASK 4 : Write a PTransform to count occurence of words
 ########################################################################################
 
-########################################################################################
-# TASK 5 : ranking words by occuring and taking top N
-########################################################################################
+class CountWordFrequency(beam.PTransform):
+ 
+    def expand(self, pcoll: PCollection[str]) -> PCollection[Tuple[str, int]]:
+        result = pcoll | "Count" >> beam.combiners.Count.PerElement()
+        return result
 
 ########################################################################################
-# TASK 6 : prettify output before writing to files
+# TASK 5 : Write a PTransform to rank words by occuring and taking top N
 ########################################################################################
 
-def prettify(tl: List[Tuple[str, int]]) -> str:
-    pretty_str = ""
-    for t in tl:
-        pretty_str += f"{t[0]},{t[1]}\n"
-    return pretty_str
+class TopWords(beam.PTransform):
+ 
+    def expand(self, pcoll: PCollection[Tuple[str, int]]
+    ) -> PCollection[List[Tuple[str, int]]]:
+        result= pcoll | "Rank" >> beam.combiners.Top.Of(10,key=lambda t: t[1])   
+        return result
+
+########################################################################################
+# TASK 6 : Write a DoFn to prettify output before writing to files
+########################################################################################
+
+class Prettify(beam.DoFn):
+
+    def process(self, element: List[Tuple[str, int]]) -> List[str]:
+        pretty_str = ""
+        for t in element:
+            pretty_str += f"{t[0]},{t[1]}\n"
+        return [pretty_str]
 
 ########################################################################################
 # TASK 7 : PTransform to represent the core pipeline logic (excludes input + output)
@@ -87,13 +102,13 @@ def prettify(tl: List[Tuple[str, int]]) -> str:
 
 class FrequentWords(beam.PTransform):
  
-    def expand(self, pcoll):
+    def expand(self, pcoll: PCollection[str]) -> PCollection[str]:
         speech: PCollection[str] = pcoll | "speech" >> beam.ParDo(ExtractSpeech())
         words: PCollection[str] = speech | "words" >> beam.ParDo(SpeechToWords())
         sanitized: PCollection[str] = words | "clean" >> beam.ParDo(SanitizeWords())
-        counted: PCollection[Tuple[str, int]] = sanitized | "Count" >> beam.combiners.Count.PerElement()
-        ranked: PCollection[List[Tuple[str, int]]] = counted | "Rank" >> beam.combiners.Top.Of(10,key=lambda t: t[1])
-        prettied: PCollection[str] = ranked | "Pretty print" >> beam.Map(prettify)   
+        sums: PCollection[Tuple[str, int]] = sanitized | "sums" >> CountWordFrequency()
+        ranked: PCollection[List[Tuple[str, int]]] = sums | "Rank" >> TopWords()   
+        prettied: PCollection[str] = ranked | "Pretty print" >> beam.ParDo(Prettify())
         return prettied  
 
 #######################################################################################
@@ -109,6 +124,6 @@ def run(
             file_pattern=beam_options.input_filename, 
             skip_header_lines=1)
         # 2. Transform        
-        stats: PCollection[dict] = records | "calculations" >> FrequentWords()
+        stats: PCollection[str] = records | "calculations" >> FrequentWords()
         # 3. Load
         stats | "Write output" >> beam.io.WriteToText(beam_options.output_filename)    
