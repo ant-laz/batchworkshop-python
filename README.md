@@ -8,7 +8,7 @@ The "main" brach has the complete code for the batch pipeline.
 
 the "workshop" branch has code with gaps that are to be completed live in the workshop.
 
-Checout the "workshop" branch and challenge yourself ! 
+Checkout the "workshop" branch and challenge yourself ! 
 
 ```sh
 git checkout workshop
