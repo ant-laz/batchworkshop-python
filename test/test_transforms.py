@@ -4,13 +4,8 @@ import unittest
 import apache_beam as beam
 
 from apache_beam.testing.test_pipeline import TestPipeline
-from apache_beam.testing.util import assert_that, equal_to, equal_to_per_window
-from apache_beam.transforms.window import TimestampedValue, IntervalWindow
-from apache_beam.options.pipeline_options import PipelineOptions, StandardOptions
-from apache_beam.testing.test_stream import TestStream
-from apache_beam.transforms.trigger import AfterWatermark, AccumulationMode
-from apache_beam.transforms.combiners import CountCombineFn
-from apache_beam.utils.timestamp import Duration
+from apache_beam.testing.util import assert_that, equal_to
+from apache_beam.options.pipeline_options import PipelineOptions
 
 
 import my_pipeline
