@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from typing import List, Tuple
+from typing import List, Tuple, Iterable
 
 import apache_beam as beam
 from apache_beam import PCollection
@@ -35,13 +35,13 @@ class ExtractSpeech(beam.DoFn):
   # example 2 output:
   # 'Hagrid is bringing him.'
   # need to handle both cases, extract speech field for all lines
-  def process(self, element: str) -> List[str]:
+  def process(self, element: str) -> Iterable[str]:
     speech_field = None
     if element.find('"') != -1:
       speech_field = element.split('"')[1]
     else:
       speech_field = element.split(',')[3]
-    return [speech_field]
+    yield speech_field
 
 
 ########################################################################################
@@ -56,8 +56,9 @@ class SpeechToWords(beam.DoFn):
   # 'Hagrid is bringing him.'
   # example output 1:
   # [ 'Hagrid', 'is', 'bringing', 'him.' ]
-  def process(self, element: str) -> List[str]:
-    return element.split()
+  def process(self, element: str) -> Iterable[str]:
+    for word in element.split():
+      yield word
 
 
 ########################################################################################
@@ -72,11 +73,11 @@ class SanitizeWords(beam.DoFn):
   # ['Hagrid', 'is', 'bringing', 'him.']
   # example output:
   # ['hagrid', 'is', 'bringing', 'him']
-  def process(self, element: str) -> List[str]:
+  def process(self, element: str) -> Iterable[str]:
     word = element
     word = word.lower()
     word = word.replace(",", "").replace(".", "")
-    return [word]
+    yield word
 
 
 ########################################################################################
@@ -130,11 +131,11 @@ class Prettify(beam.DoFn):
   # [('harry',100), ('voldermort',99), ('draco',98)]
   # example output:
   # ["harry,100\nvoldermort,99\ndraco,98\n"]
-  def process(self, element: List[Tuple[str, int]]) -> List[str]:
+  def process(self, element: List[Tuple[str, int]]) -> Iterable[str]:
     pretty_str = ""
     for t in element:
       pretty_str += f"{t[0]},{t[1]}\n"
-    return [pretty_str]
+    yield pretty_str
 
 
 ########################################################################################
