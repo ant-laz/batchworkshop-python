@@ -1,0 +1,11 @@
+ID_number,scene,character_name,dialogue
+1,1,Albus Dumbledore,"I should have known that you would be here, Professor McGonagall."
+2,1,Minerva McGonagall,"Good evening, Professor Dumbledore. Are the rumours true Albus?"
+3,1,Albus Dumbledore,"I'm afraid so, Professor. The good, and the bad."
+4,1,Minerva McGonagall,And the boy?
+5,1,Albus Dumbledore,Hagrid is bringing him.
+6,1,Minerva McGonagall,Do you think it wise to trust Hagrid with something as important as this?
+7,1,Albus Dumbledore,"Ah, Professor, I would trust Hagrid with my life."
+8,1,Rubeus Hagrid,"Professor Dumbledore, Sir. Professor McGonagall."
+9,1,Albus Dumbledore,"No problems, I trust, Hagrid?"
+10,1,Rubeus Hagrid,"No, Sir. Little tyke fell asleep just as we were flying over Bristol. Heh.Try not to wake him. There you go."
