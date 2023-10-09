@@ -36,7 +36,9 @@ def run(
         records: PCollection[str] = pipeline | "Reading input" >> beam.io.ReadFromText(
             file_pattern=beam_options.input_filename, 
             skip_header_lines=1)
-        # 2. Transform        
+        # 2. Transform
+        # For alternative style transforms, use frequent_words() instead
+        # (see transforms_alternative_style.py)
         stats: PCollection[str] = records | "calculations" >> FrequentWords()
         # 3. Load
         stats | "Write output" >> beam.io.WriteToText(beam_options.output_filename)
