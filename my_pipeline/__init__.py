@@ -15,3 +15,4 @@
 
 from .pipeline import *
 from .transforms import *
+from .transforms_alternative_style import *
