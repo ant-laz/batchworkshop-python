@@ -169,11 +169,7 @@ Here is a description of what each of these flags mean
 | input-filename | Custom. The input file to the pipeline. |
 | output-filename | Custom. The output file of the pipeline |
 
-# 4. Executing the pipeline using the DataflowRunner
-
-TODO
-
-# 5. Credits
+# 4. Credits
 
 This is based on a workshop created by Israel Herraiz which can be found [here](https://youtu.be/ljoba-i6ZPk)
 
