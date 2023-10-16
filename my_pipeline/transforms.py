@@ -36,7 +36,11 @@ class ExtractSpeech(beam.DoFn):
   # 'Hagrid is bringing him.'
   # need to handle both cases, extract speech field for all lines
   def process(self, element: str) -> Iterable[str]:
-    pass
+    if '"' in element:
+      speech_line = element.split('"')[1]
+    else:
+      speech_line = element.split(",")[3]
+    yield speech_line
 
 
 ########################################################################################
@@ -52,7 +56,10 @@ class SpeechToWords(beam.DoFn):
   # example output 1:
   # [ 'Hagrid', 'is', 'bringing', 'him.' ]
   def process(self, element: str) -> Iterable[str]:
-    pass
+    for w in element.split():
+      # Do something here
+      yield w
+    # return element.split()
 
 
 ########################################################################################
@@ -68,7 +75,11 @@ class SanitizeWords(beam.DoFn):
   # example output:
   # ['hagrid', 'is', 'bringing', 'him']
   def process(self, element: str) -> Iterable[str]:
-    pass
+    yield (element
+           .lower()
+           .replace(",", "")
+           .replace(".", "")
+           .replace("?", ""))
 
 
 ########################################################################################
@@ -84,7 +95,8 @@ class CountWordFrequency(beam.PTransform):
   # example output:
   # [('harry',3), ('ron',2), ('magic',1)]
   def expand(self, pcoll: PCollection[str]) -> PCollection[Tuple[str, int]]:
-    pass
+    result: PCollection[Tuple[str, int]] = pcoll | "Count words" >> beam.combiners.Count.PerElement()
+    return result
 
 
 ########################################################################################
@@ -105,7 +117,7 @@ class TopWords(beam.PTransform):
   #  ('luna',92),   ('hedwig',91)]
   def expand(self, pcoll: PCollection[Tuple[str, int]]
              ) -> PCollection[List[Tuple[str, int]]]:
-    pass
+    return pcoll | "Get top words" >> beam.combiners.Top.Of(10, key=lambda t: t[1])
 
 
 ########################################################################################
@@ -119,9 +131,12 @@ class Prettify(beam.DoFn):
   # example input:
   # [('harry',100), ('voldermort',99), ('draco',98)]
   # example output:
-  # ["harry,100\nvoldermort,99\ndraco,98\n"]
+  # "harry,100\nvoldermort,99\ndraco,98\n"
   def process(self, element: List[Tuple[str, int]]) -> Iterable[str]:
-    pass
+    output = ""
+    for word, count in element:
+      output += f"{word},{count}\n"
+    yield output
 
 
 ########################################################################################
@@ -142,4 +157,11 @@ class FrequentWords(beam.PTransform):
   # example output
   # [ "harry,4\npotter,3\nmagic,2\nhogwarts,1\n"]
   def expand(self, pcoll: PCollection[str]) -> PCollection[str]:
-    pass
+    speech: PCollection[str] = pcoll | "Extract text" >> beam.ParDo(ExtractSpeech())
+    words: PCollection[str] = speech | "Extract words" >> beam.ParDo(SpeechToWords())
+    sanitized: PCollection[str] = words | "Sanitize" >> beam.ParDo(SanitizeWords())
+    sums: PCollection[Tuple[str, int]] = sanitized | "Count words" >> CountWordFrequency()
+    top: PCollection[List[Tuple[str, int]]] = sums | "Top 10" >> TopWords()
+    pretty: PCollection[str] = top | "Pretty printing" >> beam.ParDo(Prettify())
+    return pretty
+
