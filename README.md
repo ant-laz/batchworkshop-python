@@ -97,37 +97,37 @@ To run just a single test, choose from the below.
 
 For task 1
 ```sh
-python -m unittest test.test_pipeline.TestExtractSpeech.test_task_1_extract_speech
+python -m unittest test.test_transforms.TestExtractSpeech.test_task_1_extract_speech
 ```
 
 For task 2
 ```sh
-python -m unittest test.test_pipeline.TestSpeechToWords.test_task_2_speech_to_words
+python -m unittest test.test_transforms.TestSpeechToWords.test_task_2_speech_to_words
 ```
 
 For task 3
 ```sh
-python -m unittest test.test_pipeline.TestSanitizeWords.test_task_3_sanitize_words
+python -m unittest test.test_transforms.TestSanitizeWords.test_task_3_sanitize_words
 ```
 
 For task 4
 ```sh
-python -m unittest test.test_pipeline.TestCountWordFrequency.test_task_4_count_word_frequency
+python -m unittest test.test_transforms.TestCountWordFrequency.test_task_4_count_word_frequency
 ```
 
 For task 5
 ```sh
-python -m unittest test.test_pipeline.TopWords.test_task_5_top_words
+python -m unittest test.test_transforms.TopWords.test_task_5_top_words
 ```
 
 For task 6
 ```sh
-python -m unittest test.test_pipeline.Prettify.test_task_6_prettify
+python -m unittest test.test_transforms.Prettify.test_task_6_prettify
 ```
 
 For task 7
 ```sh
-python -m unittest test.test_pipeline.FrequentWords.test_task_7_frequent_words
+python -m unittest test.test_transforms.FrequentWords.test_task_7_frequent_words
 ```
 
 
